@@ -1,43 +1,73 @@
 from typing import KeysView
+from django.http import response
 from django.http.response import Http404, HttpResponseNotFound
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 # Create your views here.
 
-
-def home(request):
-    return HttpResponse("<h1>Home Page This Is !<h1>")
-
-
-monthly_challenges={
-    "January":"<h1>Jan is the month<h1>",
-    "February":"<h1> February is the month<h1>",
-    "March":"<h1> March is the month<h1>",
-    "April":"<h1> April is the month<h1>",
-    "May":"<h1> May is the month<h1>",
-    "June":"<h1> June is the month<h1>",
-    "July":"<h1> July is the month<h1>",
-    "August":"<h1> August is the month<h1>",
-    "September":"<h1> September is the month<h1>",
-    "October":"<h1> October is the month<h1>",
-    "November":"<h1> November is the month<h1>",
-    "December":"<h1> December is the month<h1>",
+monthly_challenges = {
+    "January": "Jan is the month",
+    "February": "February is the month",
+    "March": "March is the month",
+    "April": "April is the month",
+    "May": "May is the month",
+    "June": "June is the month",
+    "July": "July is the month",
+    "August": "August is the month",
+    "September": "September is the month",
+    "October": "October is the month",
+    "November": "November is the month",
+    "December": "December is the month"
 }
 
-def month_number(request,month_key):
-    return_text = None    
-    print(month_key)    
-    values_1=monthly_challenges.values()    
-    value_list = list(values_1)
-    month_value=value_list[month_key-1]
-    return HttpResponse(month_value)
+def home(request):
+    
+    list_months=list(monthly_challenges.keys())
+    
+    print(type(list_months))
 
-def month(request, month):
+    url_text="http://127.0.0.1:8000/challenges"
+    
+    return_text=""
+
+    for keys in list_months:
+            return_text += f"<li><a href={url_text}/{keys}>{keys}</a></li>"
+            print(keys) 
+                    
+    return HttpResponse("<ul style=\"list-style-none:none\">"+return_text+"</ul>")
+
+
+
+
+def month_number(request, month_key):
+    print(month_key)
+
+    #value_list = list(monthly_challenges.values())
+    # month_value=value_list[month_key-1]
+    # return HttpResponseRedirect(month_value)
+
+    # Redirecting URLS
+    if month_key > 0 and month_key < 13:
+        key_month_list = list(monthly_challenges.keys())
+        month = key_month_list[month_key-1]
+        redirect_path = reverse("monthly_challenges_string", args=[month])
+
+    else:
+        return HttpResponseNotFound("<h1>Bad Request<h1> <p1> No such month with key <p1>  " + str(month_key))
+
+    return HttpResponseRedirect(redirect_path)
+
+
+def month(request, month_str):
     return_text = None
-    print(month)
+    print(month_str)
     try:
-        return_text=monthly_challenges[month]
+        return_text = monthly_challenges[month_str]
+        redirect_text = f"<h1>{return_text}</h1>"
     except:
-        return HttpResponseNotFound("<h1>Bad request<h1>")
-    return   HttpResponse(return_text)
+        return_text_1 = "Bad request"
+        response_text_1 = f"<h1>{return_text_1}</h1>"
+        return HttpResponseNotFound(response_text_1)
+    return HttpResponse(redirect_text)

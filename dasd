@@ -1,0 +1,11 @@
+[33mcommit c6d3cda5bdfa8ff5e0750cbf48ca5015493fa9da[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Arun Kaushik <arunkaushikp@gmail.com>
+Date:   Thu Sep 16 23:18:33 2021 +0530
+
+    dynamic variable_path
+
+[33mcommit a5236b4d547ce76c2c0b976bd9249395a66a2457[m
+Author: Arun Kaushik <arunkaushikp@gmail.com>
+Date:   Mon Sep 13 17:00:01 2021 +0530
+
+    dynamic input achieved
