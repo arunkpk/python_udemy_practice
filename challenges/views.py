@@ -4,6 +4,7 @@ from django.http.response import Http404, HttpResponseNotFound
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -28,18 +29,29 @@ def home(request):
     
     print(type(list_months))
 
-    url_text="http://127.0.0.1:8000/challenges"
-    
     return_text=""
 
+    response_data = render_to_string("challenges/index.html")
+
+    #way-1
+
+    url_text="http://127.0.0.1:8000/challenges"
+     
+   
+  #  for keys in list_months:           
+  #          print(keys)
+  #          return_text += f"<li><a href={url_text}/{keys}>{keys}</a></li>"
+
+    #way-2 
     for keys in list_months:
-            return_text += f"<li><a href={url_text}/{keys}>{keys}</a></li>"
-            print(keys) 
-                    
-    return HttpResponse("<ul style=\"list-style-none:none\">"+return_text+"</ul>")
-
-
-
+            redirect_url=reverse("monthly_challenges_string",args=[keys])
+            print(redirect_url)
+            print(keys)
+            return_text += f"<li><a href={redirect_url}>{keys}</a></li>"
+            
+   #return HttpResponse("<ul style=\"list-style-none:none\">"+return_text+"</ul>")                
+    
+    return HttpResponse(response_data)
 
 def month_number(request, month_key):
     print(month_key)
@@ -56,18 +68,22 @@ def month_number(request, month_key):
 
     else:
         return HttpResponseNotFound("<h1>Bad Request<h1> <p1> No such month with key <p1>  " + str(month_key))
-
+ 
     return HttpResponseRedirect(redirect_path)
 
 
 def month(request, month_str):
+
     return_text = None
+
     print(month_str)
+
     try:
         return_text = monthly_challenges[month_str]
         redirect_text = f"<h1>{return_text}</h1>"
+        response_data=render_to_string("challenges/challenge.html")
     except:
         return_text_1 = "Bad request"
         response_text_1 = f"<h1>{return_text_1}</h1>"
         return HttpResponseNotFound(response_text_1)
-    return HttpResponse(redirect_text)
+    return HttpResponse(response_data)
