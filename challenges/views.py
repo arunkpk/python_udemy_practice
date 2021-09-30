@@ -5,7 +5,6 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template.loader import render_to_string
-
 # Create your views here.
 
 monthly_challenges = {
@@ -51,7 +50,7 @@ def home(request):
             
    #return HttpResponse("<ul style=\"list-style-none:none\">"+return_text+"</ul>")                
     
-    return HttpResponse(response_data)
+    return HttpResponse(return_text)
 
 def month_number(request, month_key):
     print(month_key)
@@ -80,10 +79,14 @@ def month(request, month_str):
 
     try:
         return_text = monthly_challenges[month_str]
-        redirect_text = f"<h1>{return_text}</h1>"
-        response_data=render_to_string("challenges/challenge.html")
+      #  redirect_text = f"{return_text}"
+      #  response_data=render_to_string("challenges/challenge.html")
+        return render(request,"challenges/challenge.html",{
+            "text":return_text,
+            "month":month_str.capitalize()
+        })
     except:
         return_text_1 = "Bad request"
         response_text_1 = f"<h1>{return_text_1}</h1>"
         return HttpResponseNotFound(response_text_1)
-    return HttpResponse(response_data)
+ #   return HttpResponse(response_data)
