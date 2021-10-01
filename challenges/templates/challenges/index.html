@@ -7,6 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>hello from index</h1>
+    <h1>List of Months</h1>
+     <ul>
+     {% for month in list_months %}
+         <li> <a href={{ url_text }}/{{ month }}> {{ month }} </a></li>
+     {% endfor %}
+     </ul>
+
 </body>
 </html>

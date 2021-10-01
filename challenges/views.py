@@ -30,8 +30,13 @@ def home(request):
 
     return_text=""
 
-    response_data = render_to_string("challenges/index.html")
+    url_text="http://127.0.0.1:8000/challenges"
 
+    response_data = render_to_string("challenges/index.html",{
+        "list_months":list_months
+        
+        })
+    
     #way-1
 
     url_text="http://127.0.0.1:8000/challenges"
@@ -50,7 +55,14 @@ def home(request):
             
    #return HttpResponse("<ul style=\"list-style-none:none\">"+return_text+"</ul>")                
     
-    return HttpResponse(return_text)
+    #return HttpResponse(response_data)
+    return render(request,"challenges/index.html",{
+        "list_months":list_months,
+        "url_text":url_text
+        
+        })
+    
+
 
 def month_number(request, month_key):
     print(month_key)
